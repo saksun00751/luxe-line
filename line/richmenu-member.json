@@ -1,0 +1,89 @@
+{
+  "size": {
+    "width": 2500,
+    "height": 1686
+  },
+  "selected": true,
+  "name": "member",
+  "chatBarText": "เมนูสมาชิก",
+  "areas": [
+    {
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 833,
+        "height": 843
+      },
+      "action": {
+        "type": "uri",
+        "label": "ทางเข้าเล่น",
+        "uri": "https://liff.line.me/{LIFF_ID}/play"
+      }
+    },
+    {
+      "bounds": {
+        "x": 833,
+        "y": 0,
+        "width": 834,
+        "height": 843
+      },
+      "action": {
+        "type": "uri",
+        "label": "ฝาก",
+        "uri": "https://liff.line.me/{LIFF_ID}/deposit"
+      }
+    },
+    {
+      "bounds": {
+        "x": 1667,
+        "y": 0,
+        "width": 833,
+        "height": 843
+      },
+      "action": {
+        "type": "uri",
+        "label": "ถอน",
+        "uri": "https://liff.line.me/{LIFF_ID}/withdraw"
+      }
+    },
+    {
+      "bounds": {
+        "x": 0,
+        "y": 843,
+        "width": 833,
+        "height": 843
+      },
+      "action": {
+        "type": "uri",
+        "label": "โปรไฟล์",
+        "uri": "https://liff.line.me/{LIFF_ID}/profile"
+      }
+    },
+    {
+      "bounds": {
+        "x": 833,
+        "y": 843,
+        "width": 834,
+        "height": 843
+      },
+      "action": {
+        "type": "uri",
+        "label": "โปรโมชั่น",
+        "uri": "https://liff.line.me/{LIFF_ID}/promotions"
+      }
+    },
+    {
+      "bounds": {
+        "x": 1667,
+        "y": 843,
+        "width": 833,
+        "height": 843
+      },
+      "action": {
+        "type": "uri",
+        "label": "ติดต่อพนักงาน",
+        "uri": "https://liff.line.me/{LIFF_ID}/contact"
+      }
+    }
+  ]
+}

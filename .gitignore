@@ -1,0 +1,32 @@
+# dependencies
+node_modules
+
+# build output
+.next
+.open-next
+.wrangler
+out
+build
+next-env.d.ts
+*.tsbuildinfo
+
+# env / secrets (keep .env.example)
+.env
+.env.*
+!.env.example
+.dev.vars
+
+# rich menu image duplicates (ใช้ .png ตามสคริปต์)
+line/*.jpg
+
+# logs / OS / editor
+*.log
+npm-debug.log*
+.DS_Store
+.vscode
+.idea
+.vercel
+.claude
+
+# markdown docs
+*.md
