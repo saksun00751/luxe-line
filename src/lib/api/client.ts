@@ -9,7 +9,7 @@ import { ApiError, ERROR_TH } from "./errors";
  * ไว้ในเซสชันเข้ารหัสของแอปนี้ (ดู session-core.ts) แล้วแนบกลับไปทุกคำขอ
  */
 const API_PREFIX = "/api/line-member/v1";
-const ORIGIN = (process.env.EXTERNAL_API_BASE_URL || "https://api-ufabet.168csn.com").trim().replace(API_PREFIX, "").replace(/\/+$/, "");
+const ORIGIN = (process.env.EXTERNAL_API_BASE_URL || "https://api.36office.com").trim().replace(API_PREFIX, "").replace(/\/+$/, "");
 
 /** รูป/ไฟล์จาก backend เป็น path สัมพัทธ์ (เช่น /storage/bank_img/x.png) → ต่อ origin ให้ */
 export const assetUrl = (p?: string | null) => (!p ? null : /^https?:\/\//.test(p) ? p : ORIGIN + (p.startsWith("/") ? p : "/" + p));
