@@ -7,7 +7,7 @@ import { isAuthed } from "@/lib/session";
 import { linkMemberRichMenu, pushRegistrationMessage, unlinkRichMenu, verifyLineIdToken } from "@/lib/line";
 import { flatErrors, changePasswordSchema, linkSchema, registerSchema, type FormState } from "@/lib/validation";
 
-/** log เวลาและผลของแต่ละขั้น (ไม่มีข้อมูลส่วนตัว) — ดูได้ด้วย `npx wrangler tail luxe-line` */
+/** log เวลาและผลของแต่ละขั้น (ไม่มีข้อมูลส่วนตัว) */
 async function step<T>(name: string, fn: () => Promise<T>): Promise<T> {
   const t = Date.now();
   try {
