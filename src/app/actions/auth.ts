@@ -66,14 +66,14 @@ export async function lineLoginAction(idToken: string): Promise<{ result?: LineA
   }
 }
 
-/** ผูก LINE เข้ากับบัญชีสมาชิกเดิม */
-export async function linkAction(_: FormState, fd: FormData): Promise<FormState> {
+/** เข้าสู่ระบบด้วยบัญชีสมาชิกเดิม (LINK_REQUIRED) — backend ผูก/เปลี่ยน LINE ให้เอง */
+export async function loginAction(_: FormState, fd: FormData): Promise<FormState> {
   const keep = pick(fd, ["user_name"]);
   const parsed = linkSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { fieldErrors: flatErrors(parsed.error), values: keep };
   const d = parsed.data;
   try {
-    await step("link", () => withLine(d.idToken, () => api.link(d.user_name, d.password)));
+    await step("login", () => withLine(d.idToken, () => api.login(d.user_name, d.password)));
     await step("afterMemberLogin", () => afterMemberLogin(d.idToken));
   } catch (e) {
     if (e instanceof ApiError) return { message: e.message, fieldErrors: e.fieldErrors, values: keep };

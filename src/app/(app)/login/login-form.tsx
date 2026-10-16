@@ -4,7 +4,7 @@ import { useActionState, useCallback, useEffect, useRef, useState } from "react"
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Loader2, Lock, MessageCircle, User } from "lucide-react";
-import { lineLoginAction, linkAction } from "@/app/actions/auth";
+import { lineLoginAction, loginAction } from "@/app/actions/auth";
 import { Field, PasswordField } from "@/components/form/field";
 import { FormAlert } from "@/components/form/form-alert";
 import { SubmitButton } from "@/components/form/submit-button";
@@ -21,7 +21,7 @@ type Phase = "idle" | "checking" | "link" | "error";
 /**
  * เข้าสู่ระบบด้วย LINE: LIFF ID token → backend
  *  - AUTHENTICATED → เข้าแอปทันที
- *  - LINK_REQUIRED → ผูก LINE กับบัญชีเดิม (user_name + password) หรือสมัครใหม่
+ *  - LINK_REQUIRED → ล็อกอินด้วย user_name + password ของสมาชิกเดิม (ไม่มีสมัครใหม่)
  */
 export function LoginForm({ next, loggedOut = false }: { next?: string; loggedOut?: boolean }) {
   const { ready, enabled, loggedIn, idToken, login, error: liffError } = useLiff();
@@ -107,7 +107,7 @@ export function LoginForm({ next, loggedOut = false }: { next?: string; loggedOu
 }
 
 function LinkForm({ idToken, next }: { idToken: string; next?: string }) {
-  const [state, action] = useActionState<FormState, FormData>(linkAction, {});
+  const [state, action] = useActionState<FormState, FormData>(loginAction, {});
   const fe = state.fieldErrors ?? {};
   // controlled — กันฟอร์มถูกรีเซ็ตหลัง action (ข้อมูลที่กรอกต้องไม่หายเมื่อ validate ไม่ผ่าน)
   const [userName, setUserName] = useState("");
@@ -118,13 +118,13 @@ function LinkForm({ idToken, next }: { idToken: string; next?: string }) {
         <input type="hidden" name="idToken" value={idToken} />
         {next && <input type="hidden" name="next" value={next} />}
         <div>
-          <div className="text-[15px] font-semibold">ผูก LINE กับบัญชีสมาชิก</div>
-          <p className="mt-0.5 text-[13px] text-muted-foreground">LINE นี้ยังไม่ได้ผูกบัญชี กรอกชื่อผู้ใช้และรหัสผ่านเดิมเพื่อผูกบัญชี</p>
+          <div className="text-[15px] font-semibold">เข้าสู่ระบบด้วยบัญชีสมาชิก</div>
+          <p className="mt-0.5 text-[13px] text-muted-foreground">กรอกชื่อผู้ใช้และรหัสผ่านของสมาชิกเดิม ระบบจะผูก LINE นี้กับบัญชีให้อัตโนมัติ</p>
         </div>
         <FormAlert message={state.message} />
         <Field label="ชื่อผู้ใช้ (เบอร์โทร)" icon={User} name="user_name" autoComplete="username" autoCapitalize="none" placeholder="กรอกชื่อผู้ใช้" value={userName} onChange={(e) => setUserName(e.target.value)} error={fe.user_name} />
         <PasswordField label="รหัสผ่าน" icon={Lock} name="password" autoComplete="current-password" placeholder="กรอกรหัสผ่าน" value={password} onChange={(e) => setPassword(e.target.value)} error={fe.password} />
-        <SubmitButton pendingText="กำลังผูกบัญชี…">ผูกบัญชี</SubmitButton>
+        <SubmitButton pendingText="กำลังเข้าสู่ระบบ…">เข้าสู่ระบบ</SubmitButton>
         <Link href="/contact" className="p-1 text-center text-[13px] text-primary">ลืมรหัสผ่าน? ติดต่อพนักงาน</Link>
       </form>
     </>

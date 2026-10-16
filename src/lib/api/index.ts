@@ -99,10 +99,13 @@ export const api = {
     return authResult(d);
   },
 
-  /** ผูก LINE ที่ยืนยันแล้วเข้ากับบัญชีสมาชิกเดิม */
-  async link(userName: string, password: string): Promise<LineAuthResult> {
+  /**
+   * เข้าสู่ระบบด้วย ID/Password ของสมาชิกเดิม — backend ผูกหรือเปลี่ยน LINE ให้อัตโนมัติ (ไม่มีการสมัครใหม่)
+   * CSRF token ใหม่ใน response ถูกเก็บลงเซสชันผ่าน call() แล้ว commit ที่นี่
+   */
+  async login(userName: string, password: string): Promise<LineAuthResult> {
     const state = await storedBackend();
-    const d = await call<{ status: string; authenticated: boolean; member?: RawMember }>("/auth/link", { method: "POST", body: { user_name: userName, password } }, state);
+    const d = await call<{ status: string; authenticated: boolean; member?: RawMember }>("/auth/login", { method: "POST", body: { user_name: userName, password } }, state);
     await commit(state, d.authenticated ? "authenticated" : "pending", d.member);
     return authResult(d);
   },

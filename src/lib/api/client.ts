@@ -140,10 +140,11 @@ export async function refreshCsrf(state: Backend) {
   state.csrf = d.csrf_token ?? state.csrf;
 }
 
-/** เริ่ม Laravel session ใหม่ (ใช้ตอน LINE login) */
+/** เริ่ม Laravel session ใหม่ด้วย GET /session/bootstrap (ใช้ตอน LINE login) — ได้ cookie + CSRF token */
 export async function freshBackend(): Promise<Backend> {
   const state: Backend = { jar: {} };
-  await refreshCsrf(state);
+  await call("/session/bootstrap", {}, state);
+  if (!state.csrf && !state.jar["XSRF-TOKEN"]) await refreshCsrf(state);
   return state;
 }
 
