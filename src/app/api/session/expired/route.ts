@@ -4,9 +4,9 @@ import { SESSION_COOKIE } from "@/lib/session-core";
 /** Laravel session หมดอายุ → ล้าง cookie เซสชันของเรา แล้วส่งไปหน้า login */
 export function GET(req: NextRequest) {
   const next = req.nextUrl.searchParams.get("next");
-  const url = new URL("/login", req.url);
-  if (next && next.startsWith("/") && !next.startsWith("//")) url.searchParams.set("next", next);
-  const res = NextResponse.redirect(url);
+  // ใช้ Location แบบ relative — หลัง reverse proxy req.url จะเป็น localhost:4600 ทำให้เด้งไปโฮสต์ผิด
+  const safeNext = next && next.startsWith("/") && !next.startsWith("//") ? `?next=${encodeURIComponent(next)}` : "";
+  const res = new NextResponse(null, { status: 307, headers: { Location: `/login${safeNext}` } });
   res.cookies.delete(SESSION_COOKIE);
   return res;
 }
