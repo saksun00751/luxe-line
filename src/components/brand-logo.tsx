@@ -23,7 +23,6 @@ export async function BrandLogo({ href = "/" }: { href?: string }) {
       <BrandMark logo={site.logo} />
       <span className="min-w-0 leading-[1.1]">
         <span className="block font-display text-[19px] font-bold tracking-[.18em] text-primary">{site.name}</span>
-        <span className="block text-[10px] tracking-[.24em] text-muted-foreground">{site.tagline}</span>
       </span>
     </Link>
   );

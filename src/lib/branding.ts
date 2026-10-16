@@ -3,7 +3,7 @@ import { cache } from "react";
 import { api } from "@/lib/api";
 import { site } from "@/config/site";
 
-export type Branding = { name: string; tagline: string; title: string; description: string; logo: string | null };
+export type Branding = { name: string; title: string; description: string; logo: string | null };
 
 const TTL_OK = 5 * 60_000; // ดึงสำเร็จ: ใช้ซ้ำ 5 นาที
 const TTL_FAIL = 30_000; // ดึงไม่สำเร็จ: ลองใหม่ทุก 30 วินาที ไม่ยิงซ้ำทุก request
@@ -15,7 +15,6 @@ let inflight: Promise<Branding | null> | undefined;
 
 const fallback = (): Branding => ({
   name: site.name,
-  tagline: site.tagline,
   title: site.name,
   description: `${site.name} — สมัคร เข้าสู่ระบบ ฝาก ถอน ผ่าน LINE`,
   logo: null,
@@ -27,7 +26,6 @@ async function load(): Promise<Branding | null> {
     const name = b.siteName || site.name;
     const value: Branding = {
       name,
-      tagline: site.tagline,
       title: b.title || name,
       description: b.desc || `${name} — สมัคร เข้าสู่ระบบ ฝาก ถอน ผ่าน LINE`,
       logo: b.logo,

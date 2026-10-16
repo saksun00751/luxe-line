@@ -49,7 +49,12 @@ export function LoginForm({ next, loggedOut = false }: { next?: string; loggedOu
       } catch {}
       setPhase("checking");
       setToken(t);
-      const r = await lineLoginAction(t);
+      let r: Awaited<ReturnType<typeof lineLoginAction>>;
+      try {
+        r = await lineLoginAction(t);
+      } catch {
+        r = { message: "ระบบขัดข้องชั่วคราว กรุณาลองใหม่อีกครั้ง" }; // Server Action throw (เช่น config ฝั่ง server ผิด) ห้ามค้างที่ "กำลังตรวจสอบ"
+      }
       if (r.result === "AUTHENTICATED") {
         const to = memberDest(dest);
         if (to.startsWith("http")) window.location.href = to; // LIFF สมาชิก (คนละ LIFF ID)

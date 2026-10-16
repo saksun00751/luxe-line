@@ -16,6 +16,7 @@ export async function verifyLineIdToken(idToken: string): Promise<{ userId: stri
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams({ id_token: idToken, client_id: clientId }),
     cache: "no-store",
+    signal: AbortSignal.timeout(8_000),
   });
   if (!res.ok) return null;
   const j = (await res.json()) as { sub?: string; name?: string };
@@ -29,6 +30,7 @@ async function lineApi(path: string, body?: unknown, method: "POST" | "DELETE" =
     headers: { Authorization: `Bearer ${MSG_TOKEN}`, ...(body ? { "Content-Type": "application/json" } : {}) },
     body: body ? JSON.stringify(body) : undefined,
     cache: "no-store",
+    signal: AbortSignal.timeout(8_000),
   });
   if (!res.ok) console.error("[LINE]", path, res.status, await res.text().catch(() => ""));
 }

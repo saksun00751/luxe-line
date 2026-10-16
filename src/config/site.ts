@@ -1,6 +1,5 @@
 export const site = {
   name: process.env.NEXT_PUBLIC_BRAND_NAME || "LUXE",
-  tagline: process.env.NEXT_PUBLIC_BRAND_TAGLINE || "PREMIUM CLUB",
   lineOaUrl: process.env.NEXT_PUBLIC_LINE_OA_URL || "https://line.me/R/",
   contactHours: process.env.NEXT_PUBLIC_CONTACT_HOURS || "ตลอด 24 ชั่วโมง",
   liffId: process.env.NEXT_PUBLIC_LIFF_ID || "",
