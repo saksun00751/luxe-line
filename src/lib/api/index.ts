@@ -105,7 +105,16 @@ export const api = {
    */
   async login(userName: string, password: string): Promise<LineAuthResult> {
     const state = await storedBackend();
-    const d = await call<{ status: string; authenticated: boolean; member?: RawMember }>("/auth/login", { method: "POST", body: { user_name: userName, password } }, state);
+    const body = { user_name: userName, password };
+    type Raw = { status: string; authenticated: boolean; member?: RawMember };
+    let d: Raw;
+    try {
+      d = await call<Raw>("/auth/login", { method: "POST", body }, state);
+    } catch (e) {
+      // บัญชีผูก LINE อื่นอยู่ → ย้ายมา LINE นี้ด้วยรหัสผ่านเดิม (payload ของ relink สมมติว่าเหมือน login)
+      if (!(e instanceof ApiError) || e.code !== "MEMBER_ALREADY_LINKED") throw e;
+      d = await call<Raw>("/auth/relink", { method: "POST", body }, state);
+    }
     await commit(state, d.authenticated ? "authenticated" : "pending", d.member);
     return authResult(d);
   },
