@@ -99,10 +99,13 @@ export const api = {
     return authResult(d);
   },
 
-  /** ผูก LINE ที่ยืนยันแล้ว (LINK_REQUIRED) เข้ากับบัญชีสมาชิกเดิมด้วย user_name + password */
+  /**
+   * ผูก LINE ที่ยืนยันแล้ว (LINK_REQUIRED) เข้ากับบัญชีสมาชิกเดิมด้วย user_name + password
+   * ใช้ /auth/login (ไม่ใช่ /auth/link ที่ปฏิเสธบัญชีที่ผูก LINE อื่นอยู่) — backend ผูกครั้งแรก (LINKED) หรือเปลี่ยน LINE (RELINKED) ให้เอง
+   */
   async link(userName: string, password: string): Promise<LineAuthResult> {
     const state = await storedBackend();
-    const d = await call<{ status: string; authenticated: boolean; member?: RawMember }>("/auth/link", { method: "POST", body: { user_name: userName, password } }, state);
+    const d = await call<{ status: string; authenticated: boolean; member?: RawMember }>("/auth/login", { method: "POST", body: { user_name: userName, password } }, state);
     await commit(state, d.authenticated ? "authenticated" : "pending", d.member);
     return authResult(d);
   },
