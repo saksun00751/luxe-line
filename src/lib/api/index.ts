@@ -99,22 +99,10 @@ export const api = {
     return authResult(d);
   },
 
-  /**
-   * เข้าสู่ระบบด้วย ID/Password ของสมาชิกเดิม — backend ผูกหรือเปลี่ยน LINE ให้อัตโนมัติ (ไม่มีการสมัครใหม่)
-   * CSRF token ใหม่ใน response ถูกเก็บลงเซสชันผ่าน call() แล้ว commit ที่นี่
-   */
-  async login(userName: string, password: string): Promise<LineAuthResult> {
+  /** ผูก LINE ที่ยืนยันแล้ว (LINK_REQUIRED) เข้ากับบัญชีสมาชิกเดิมด้วย user_name + password */
+  async link(userName: string, password: string): Promise<LineAuthResult> {
     const state = await storedBackend();
-    const body = { user_name: userName, password };
-    type Raw = { status: string; authenticated: boolean; member?: RawMember };
-    let d: Raw;
-    try {
-      d = await call<Raw>("/auth/login", { method: "POST", body }, state);
-    } catch (e) {
-      // บัญชีผูก LINE อื่นอยู่ → ย้ายมา LINE นี้ด้วยรหัสผ่านเดิม (payload ของ relink สมมติว่าเหมือน login)
-      if (!(e instanceof ApiError) || e.code !== "MEMBER_ALREADY_LINKED") throw e;
-      d = await call<Raw>("/auth/relink", { method: "POST", body }, state);
-    }
+    const d = await call<{ status: string; authenticated: boolean; member?: RawMember }>("/auth/link", { method: "POST", body: { user_name: userName, password } }, state);
     await commit(state, d.authenticated ? "authenticated" : "pending", d.member);
     return authResult(d);
   },
